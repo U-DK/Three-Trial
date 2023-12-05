@@ -33,15 +33,24 @@ jobs:
         uses: actions/checkout@v4
       - name: Setup Pages
         uses: actions/configure-pages@v4
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20.7.0'
+      - name: Copy homepage
+        run: |
+          mkdir -p to-deploy
+          cp index.html to-deploy/
       - name: Install and Build 🔧
         run: |
           npm install
           npm run build
+          mv dist /to-deploy/
+          cd ../
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v2
         with:
-          # Upload entire repository
-          path: '.'
+          path: to-deploy/
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v3
